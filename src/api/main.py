@@ -3,6 +3,8 @@ import logging
 from pathlib import Path
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -80,9 +82,10 @@ class RespuestaResponse(BaseModel):
     fragmentos_usados: list[dict]
 
 # --- Endpoints ---
+app.mount("/static", StaticFiles(directory="src/api/static"), name="static")
 @app.get("/")
 def raiz():
-    return {"estado": "ok", "mensaje": "Chatbot ICT funcionando"}
+    return FileResponse("src/api/static/index.html")
 
 @app.get("/health")
 def health():
