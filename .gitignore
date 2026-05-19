@@ -1,0 +1,26 @@
+# Entorno virtual Python
+venv/
+.venv/
+
+# Variables de entorno (API keys, contraseñas)
+.env
+
+# Base de datos vectorial (se genera localmente)
+data/vectordb/
+
+# Logs
+logs/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Modelos descargados (pesados, no van a Git)
+models/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
