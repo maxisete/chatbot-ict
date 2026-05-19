@@ -8,13 +8,15 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
+import time
+from src.api.logging_config import setup_logging, log_consulta
 from sentence_transformers import SentenceTransformer
 import chromadb
 from groq import Groq
 
 # --- Configuración ---
 load_dotenv()
-logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
+setup_logging()
 logger = logging.getLogger(__name__)
 
 VECTORDB_DIR = Path("data/vectordb")
@@ -102,6 +104,7 @@ def consultar(request: PreguntaRequest):
     logger.info(f"Consulta recibida: {request.pregunta}")
 
     # 1. Buscar fragmentos relevantes
+    inicio = time.time()
     embedding = modelo_embeddings.encode(request.pregunta).tolist()
     resultados = coleccion_chromadb.query(
         query_embeddings=[embedding],
@@ -132,7 +135,9 @@ def consultar(request: PreguntaRequest):
     )
 
     respuesta_texto = respuesta_groq.choices[0].message.content
-    logger.info(f"Respuesta generada ({len(respuesta_texto)} chars)")
+    duracion = int((time.time() - inicio) * 1000)
+    logger.info(f"Respuesta generada ({len(respuesta_texto)} chars, {duracion}ms)")
+    log_consulta(request.pregunta, respuesta_texto, fragmentos, duracion)
 
     return RespuestaResponse(
         respuesta=respuesta_texto,
