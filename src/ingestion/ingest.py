@@ -16,6 +16,7 @@ EMBEDDING_MODEL = "paraphrase-multilingual-mpnet-base-v2"
 PRIORIDAD_DOCUMENTOS = {
     "R.D. 346 2011 de 11 de Marzo": 1,
     "Orden ECE 983 2019": 1,
+    "tablas_normativa_ict": 1,
     "Reglamento ICT2 Televés": 2
 }
 
@@ -26,6 +27,10 @@ def extraer_texto_pdf(pdf_path: Path) -> str:
     for pagina in reader.pages:
         texto += pagina.extract_text() or ""
     return texto
+
+def extraer_texto_txt(txt_path: Path) -> str:
+    """Extrae texto de un fichero .txt."""
+    return txt_path.read_text(encoding="utf-8")
 
 def trocear_texto(texto: str, nombre_doc: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP):
     """Divide el texto en fragmentos solapados con metadatos."""
@@ -64,7 +69,7 @@ def ingestar_pdfs():
     )
     print(f"Colección '{COLLECTION_NAME}' lista.")
 
-    pdfs = list(PDFS_DIR.glob("*.pdf"))
+    pdfs = list(PDFS_DIR.glob("*.pdf")) + list(PDFS_DIR.glob("*.txt"))
     if not pdfs:
         print(f"No se encontraron PDFs en {PDFS_DIR}")
         sys.exit(1)
@@ -73,7 +78,10 @@ def ingestar_pdfs():
         nombre_doc = pdf_path.stem
         print(f"\nProcesando: {pdf_path.name}")
 
-        texto = extraer_texto_pdf(pdf_path)
+        if pdf_path.suffix == ".txt":
+            texto = extraer_texto_txt(pdf_path)
+        else:
+            texto = extraer_texto_pdf(pdf_path)
         print(f"  Texto extraído: {len(texto.split())} palabras")
 
         fragmentos = trocear_texto(texto, nombre_doc)
