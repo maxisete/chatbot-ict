@@ -24,3 +24,7 @@ models/
 # Archivos del sistema
 .DS_Store
 Thumbs.db
+
+# PDFs y base de datos vectorial (no van a Git, son locales)
+data/pdfs/
+data/vectordb/
