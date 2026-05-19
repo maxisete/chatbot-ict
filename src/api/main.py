@@ -7,6 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from collections import defaultdict
 from dotenv import load_dotenv
 import time
 from src.api.logging_config import setup_logging, log_consulta
@@ -55,6 +56,8 @@ proporcionan como contexto. Sigue estas reglas estrictamente:
 modelo_embeddings = None
 coleccion_chromadb = None
 cliente_groq = None
+historial_conversaciones = defaultdict(list)
+MAX_HISTORIAL = 6  # máximo de mensajes a recordar (3 intercambios)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -89,6 +92,7 @@ app.add_middleware(
 # --- Modelos de datos ---
 class PreguntaRequest(BaseModel):
     pregunta: str
+    session_id: str = "web_default"
 
 class RespuestaResponse(BaseModel):
     respuesta: str
@@ -154,10 +158,16 @@ def consultar(request: PreguntaRequest):
             contexto += f"\n---\nFuente COMPLEMENTARIA: {meta['documento']}\n{doc}\n"
 
     # 2. Construir prompt y llamar a Groq
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": f"Contexto normativo:\n{contexto}\n\nPregunta: {request.pregunta}"}
-    ]
+    # Recuperar historial de esta sesión
+    historial = historial_conversaciones[request.session_id]
+
+    # Construir messages con historial
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+    messages.extend(historial)
+    messages.append({
+        "role": "user",
+        "content": f"Contexto normativo:\n{contexto}\n\nPregunta: {request.pregunta}"
+    })
 
     respuesta_groq = cliente_groq.chat.completions.create(
         model="llama-3.3-70b-versatile",
@@ -167,6 +177,19 @@ def consultar(request: PreguntaRequest):
     )
 
     respuesta_texto = respuesta_groq.choices[0].message.content
+
+    # Actualizar historial
+    historial_conversaciones[request.session_id].append({
+        "role": "user", "content": request.pregunta
+    })
+    historial_conversaciones[request.session_id].append({
+        "role": "assistant", "content": respuesta_texto
+    })
+
+    # Limitar tamaño del historial
+    if len(historial_conversaciones[request.session_id]) > MAX_HISTORIAL * 2:
+        historial_conversaciones[request.session_id] = historial_conversaciones[request.session_id][-MAX_HISTORIAL * 2:]
+
     duracion = int((time.time() - inicio) * 1000)
     logger.info(f"Respuesta generada ({len(respuesta_texto)} chars, {duracion}ms)")
     log_consulta(request.pregunta, respuesta_texto, fragmentos, duracion)
