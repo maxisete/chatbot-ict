@@ -30,15 +30,26 @@ Infraestructuras Comunes de Telecomunicaciones (ICT).
 Responde ÚNICAMENTE basándote en los fragmentos de normativa que se te 
 proporcionan como contexto. Sigue estas reglas estrictamente:
 
-1. Cita siempre el documento fuente (por ejemplo: "Según el R.D. 346/2011...").
-2. Si la respuesta requiere interpretación o cálculo más allá del texto literal, 
-   indícalo claramente con: "⚠️ Orientativo:".
-3. Si la información no está en el contexto proporcionado, responde exactamente: 
-   "No dispongo de información suficiente en la normativa disponible para 
-   responder a esta pregunta."
-4. Responde siempre en español.
-5. Sé preciso y conciso. Para valores numéricos (dimensiones, niveles, etc.), 
-   presenta los datos en formato tabla cuando sea posible."""
+1. JERARQUÍA DE FUENTES (obligatorio):
+   - Usa SIEMPRE primero el R.D. 346/2011 y la Orden ECE/983/2019 (normativa oficial vinculante).
+   - El Reglamento ICT2 de Televés es documentación técnica complementaria.
+     Úsalo SOLO si la normativa oficial no contiene información suficiente.
+   - Si usas Televés como complemento, indícalo explícitamente:
+     "Complementando con el Reglamento ICT2 de Televés..."
+
+2. Cita siempre el documento fuente y el apartado cuando sea posible.
+
+3. Si la respuesta requiere interpretación más allá del texto literal, 
+   indícalo con: "⚠️ Orientativo:".
+
+4. Si la información no está en ninguna de las fuentes proporcionadas, 
+   responde: "No dispongo de información suficiente en la normativa 
+   disponible para responder a esta pregunta."
+
+5. Responde siempre en español.
+
+6. Sé preciso y conciso. Para valores numéricos presenta los datos 
+   en formato tabla cuando sea posible."""
 
 # --- Modelos globales (se cargan una vez al arrancar) ---
 modelo_embeddings = None
@@ -103,23 +114,44 @@ def consultar(request: PreguntaRequest):
 
     logger.info(f"Consulta recibida: {request.pregunta}")
 
-    # 1. Buscar fragmentos relevantes
     inicio = time.time()
+
+    # 1. Buscar fragmentos con jerarquía de fuentes
     embedding = modelo_embeddings.encode(request.pregunta).tolist()
-    resultados = coleccion_chromadb.query(
+
+    # Primero buscar SOLO en fuentes oficiales (prioridad 1)
+    resultados_oficiales = coleccion_chromadb.query(
         query_embeddings=[embedding],
-        n_results=N_RESULTADOS
+        n_results=N_RESULTADOS,
+        where={"prioridad": 1}
     )
 
     fragmentos = []
     contexto = ""
-    for doc, meta in zip(resultados["documents"][0], resultados["metadatas"][0]):
+
+    # Usar fuentes oficiales
+    for doc, meta in zip(resultados_oficiales["documents"][0], resultados_oficiales["metadatas"][0]):
         fragmentos.append({
             "documento": meta["documento"],
             "chunk_id": meta["chunk_id"],
             "texto": doc[:200]
         })
-        contexto += f"\n---\nFuente: {meta['documento']}\n{doc}\n"
+        contexto += f"\n---\nFuente OFICIAL: {meta['documento']}\n{doc}\n"
+
+    # Solo si hay menos de 2 fragmentos oficiales relevantes, añadir Televés
+    if len(resultados_oficiales["documents"][0]) < 2:
+        resultados_televes = coleccion_chromadb.query(
+            query_embeddings=[embedding],
+            n_results=2,
+            where={"prioridad": 2}
+        )
+        for doc, meta in zip(resultados_televes["documents"][0], resultados_televes["metadatas"][0]):
+            fragmentos.append({
+                "documento": meta["documento"],
+                "chunk_id": meta["chunk_id"],
+                "texto": doc[:200]
+            })
+            contexto += f"\n---\nFuente COMPLEMENTARIA: {meta['documento']}\n{doc}\n"
 
     # 2. Construir prompt y llamar a Groq
     messages = [

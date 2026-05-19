@@ -12,6 +12,12 @@ COLLECTION_NAME = "normativa_ict"
 CHUNK_SIZE = 500        # palabras por fragmento
 CHUNK_OVERLAP = 50      # palabras de solapamiento entre fragmentos
 EMBEDDING_MODEL = "paraphrase-multilingual-mpnet-base-v2"
+# Prioridad de fuentes: 1 = máxima (normativa oficial), 2 = secundaria
+PRIORIDAD_DOCUMENTOS = {
+    "R.D. 346 2011 de 11 de Marzo": 1,
+    "Orden ECE 983 2019": 1,
+    "Reglamento ICT2 Televés": 2
+}
 
 def extraer_texto_pdf(pdf_path: Path) -> str:
     """Extrae todo el texto de un PDF."""
@@ -36,7 +42,8 @@ def trocear_texto(texto: str, nombre_doc: str, chunk_size: int = CHUNK_SIZE, ove
             "metadata": {
                 "documento": nombre_doc,
                 "chunk_id": chunk_id,
-                "palabras": len(chunk_palabras)
+                "palabras": len(chunk_palabras),
+                "prioridad": PRIORIDAD_DOCUMENTOS.get(nombre_doc, 2)
             }
         })
         chunk_id += 1
