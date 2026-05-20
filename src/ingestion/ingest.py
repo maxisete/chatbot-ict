@@ -55,6 +55,32 @@ def trocear_texto(texto: str, nombre_doc: str, chunk_size: int = CHUNK_SIZE, ove
         i += chunk_size - overlap
     return fragmentos
 
+def trocear_por_tabla(texto: str, nombre_doc: str):
+    """Divide el texto en fragmentos, uno por cada tabla detectada por 'TABLA:'.
+    Específico para el fichero tablas_normativa_ict.txt."""
+    fragmentos = []
+    chunk_id = 0
+    # Separar por la cabecera 'TABLA:' manteniendo el delimitador
+    bloques = texto.split("TABLA:")
+    for bloque in bloques:
+        bloque = bloque.strip()
+        if not bloque:
+            continue
+        # Reañadir el prefijo 'TABLA:' que se eliminó al hacer split
+        chunk_texto = "TABLA:" + bloque
+        fragmentos.append({
+            "id": f"{nombre_doc}_chunk_{chunk_id}",
+            "texto": chunk_texto,
+            "metadata": {
+                "documento": nombre_doc,
+                "chunk_id": chunk_id,
+                "palabras": len(chunk_texto.split()),
+                "prioridad": PRIORIDAD_DOCUMENTOS.get(nombre_doc, 2)
+            }
+        })
+        chunk_id += 1
+    return fragmentos
+
 def ingestar_pdfs():
     """Proceso principal de ingesta."""
     print(f"Cargando modelo de embeddings: {EMBEDDING_MODEL}")
@@ -84,7 +110,10 @@ def ingestar_pdfs():
             texto = extraer_texto_pdf(pdf_path)
         print(f"  Texto extraído: {len(texto.split())} palabras")
 
-        fragmentos = trocear_texto(texto, nombre_doc)
+        if nombre_doc == "tablas_normativa_ict":
+            fragmentos = trocear_por_tabla(texto, nombre_doc)
+        else:
+            fragmentos = trocear_texto(texto, nombre_doc)
         print(f"  Fragmentos generados: {len(fragmentos)}")
 
         ids = [f["id"] for f in fragmentos]

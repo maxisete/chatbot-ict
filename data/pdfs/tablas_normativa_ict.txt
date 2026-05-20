@@ -1,0 +1,276 @@
+TABLA: Reacción al fuego de cables en ICT interior de edificios
+Fuente: Orden ECE/983/2019, Anexo, Tabla 1
+
+Cable coaxial (RTV): Dca-s2,d2,a2
+Cables de pares (telefonía): Dca-s2,d2,a2
+Cables coaxiales (telefonía): Dca-s2,d2,a2
+Cables de fibra óptica: Dca-s2,d2,a2
+Cables de pares trenzados: Dca-s2,d2,a2
+
+TABLA: Reacción al fuego cables redes ultrarrápidas interior edificios
+Fuente: Orden ECE/983/2019, Anexo, Tabla 2
+
+Cables de pares: Dca-s2,d2,a2
+Cables coaxiales: Dca-s2,d2,a2
+Cables de fibra óptica: Dca-s2,d2,a2
+Cables de pares trenzados: Dca-s2,d2,a2
+
+TABLA: Dimensiones mínimas RIT (Recintos de Instalaciones de Telecomunicación)
+Fuente: R.D. 346/2011, Anexo III, epígrafe 5.5.1
+
+RITI/RITS según número de PAU:
+Hasta 20 PAU: Altura 2000mm, Anchura 1000mm, Profundidad 500mm
+De 21 a 45 PAU: Altura 2000mm, Anchura 1500mm, Profundidad 500mm
+De 46 a 74 PAU: Altura 2300mm, Anchura 2000mm, Profundidad 1000mm
+Más de 74 PAU: Altura 2300mm, Anchura 2000mm, Profundidad 2000mm
+
+RITU según número de PAU:
+Hasta 5 PAU (sin zonas comunes): Altura 1000mm, Anchura 500mm, Profundidad 300mm
+Hasta 5 PAU (con zonas comunes): Altura 1000mm, Anchura 1000mm, Profundidad 500mm
+De 6 a 16 PAU: Altura 2000mm, Anchura 1000mm, Profundidad 500mm
+De 17 a 30 PAU: Altura 2000mm, Anchura 1500mm, Profundidad 1000mm
+Más de 30 PAU: Altura 2000mm, Anchura 2000mm, Profundidad 1500mm
+
+RITU-A según número de PAU:
+Hasta 16 PAU (edificios con planta baja y más de 3 alturas): Altura 2000mm, Anchura 2000mm, Profundidad 500mm
+De 17 a 20 PAU (cualquier altura): Altura 2000mm, Anchura 2000mm, Profundidad 500mm
+De 21 a 30 PAU (cualquier altura): Altura 2000mm, Anchura 3000mm, Profundidad 500mm
+
+TABLA: Dimensiones mínimas arqueta de entrada
+Fuente: R.D. 346/2011, Anexo II, epígrafe 5.1
+
+Hasta 20 PAU: 400x400x600mm
+De 21 a 100 PAU: 600x600x800mm
+Más de 100 PAU: 800x700x820mm
+
+TABLA: Canalización externa - número mínimo de tubos de 63mm
+Fuente: R.D. 346/2011, Anexo II, epígrafe 5.2
+
+Hasta 4 PAU: 3 tubos (2 TBA+STDP, 1 reserva)
+De 5 a 20 PAU: 4 tubos (2 TBA+STDP, 2 reserva)
+De 21 a 40 PAU: 5 tubos (3 TBA+STDP, 2 reserva)
+Más de 40 PAU: 6 tubos (4 TBA+STDP, 2 reserva)
+
+TABLA: Red interior de usuario - tomas mínimas en viviendas
+Fuente: R.D. 346/2011, Anexo II, epígrafe 3.5 (modificado por Orden ECE/983/2019)
+
+Salón (estancia principal):
+- Pares trenzados: mínimo 2 registros de toma con BAT (uno con 2 tomas dobles)
+- Coaxial: 1 registro de toma
+- Fibra óptica: 1 roseta de fibra óptica con adaptador SC/APC
+
+Resto de estancias (excluidos baños y trasteros):
+- Pares trenzados: 1 registro de toma con BAT
+- Coaxial: 1 registro de toma (solo en 2 estancias diferentes)
+
+TABLA: Niveles de señal en toma de usuario - TDT (Televisión Digital Terrestre)
+Fuente: R.D. 346/2011, Anexo I, epígrafe 4.5
+Banda: 470-862 MHz (UHF)
+Nivel mínimo en toma: 47 dBµV
+Nivel máximo en toma: 70 dBµV
+Relación portadora/ruido (C/N): >= 25 dB (QAM-64) / >= 20 dB (QPSK)
+BER antes del Viterbi: < 9x10^-5
+MER (Modulation Error Ratio): >= 21 dB
+
+TABLA: Niveles de señal en toma de usuario - FM Radio y DAB
+Fuente: R.D. 346/2011, Anexo I, epígrafe 4.5
+FM Radio (87,5-108 MHz):
+- Nivel mínimo en toma: 40 dBµV
+- Nivel máximo en toma: 70 dBµV
+- Relación señal/ruido (S/N): >= 38 dB (mono) / >= 50 dB (estéreo)
+DAB Radio Digital (195-223 MHz):
+- Nivel mínimo en toma: 30 dBµV
+- Nivel máximo en toma: 70 dBµV
+- BER antes del Viterbi: < 1x10^-4
+
+TABLA: Niveles de señal en toma de usuario - Televisión por Satélite (SAT)
+Fuente: R.D. 346/2011, Anexo I, epígrafe 4.5
+Banda: 950-2150 MHz (FI satélite)
+Nivel mínimo en toma: 47 dBµV (QPSK) / 50 dBµV (8PSK / DVB-S2)
+Nivel máximo en toma: 77 dBµV
+Relación portadora/ruido (C/N): >= 11 dB (QPSK) / >= 14 dB (8PSK)
+BER antes del Viterbi: < 9x10^-5
+
+
+TABLA: Atenuación máxima de la instalación entre cabecera y toma de usuario
+Fuente: R.D. 346/2011, Anexo I, epígrafe 4.5
+Banda 15-862 MHz (TDT/FM/DAB): atenuación máxima 50 dB
+Banda 950-2150 MHz (FI satélite): atenuación máxima 55 dB
+Variación de atenuación con la frecuencia (tilt):
+- Banda 15-862 MHz: máximo 16 dB
+- Banda 950-2150 MHz: máximo 20 dB
+Respuesta amplitud/frecuencia en banda de un canal:
+- Banda 15-862 MHz: ±3 dB en toda la banda; ±0,5 dB en banda de canal
+- Banda 950-2150 MHz: ±4 dB en toda la banda; ±1,5 dB en banda de canal (ancho 1 MHz)
+
+TABLA: Atenuación típica cable coaxial RG-6 (referencia ICT)
+Fuente: R.D. 346/2011, Anexo I (valores orientativos de cálculo)
+A 5 MHz: ~1,5 dB/100m
+A 50 MHz: ~5 dB/100m
+A 200 MHz: ~10 dB/100m
+A 470 MHz: ~16 dB/100m
+A 860 MHz: ~22 dB/100m
+A 1000 MHz: ~24 dB/100m
+A 1750 MHz: ~32 dB/100m
+A 2150 MHz: ~36 dB/100m
+Nota: valores orientativos según fabricante. Para cálculos reales usar datasheet del cable.
+
+TABLA: Atenuación máxima red de cables pares trenzados (telefonía + datos)
+Fuente: R.D. 346/2011, Anexo I, epígrafe 5
+Cable categoría 6 mínimo en red interior de usuario.
+Longitud máxima cable horizontal: 90 metros (entre repartidor y toma).
+Longitud total enlace permanente (con latiguillos): 100 metros máximo.
+Atenuación máxima a 100 MHz (Cat 6): ~21 dB / 100m
+Atenuación máxima a 250 MHz (Cat 6): ~36 dB / 100m
+Pérdidas de retorno mínimas (Cat 6): >= 19 dB a 100 MHz
+
+TABLA: Atenuación máxima red de fibra óptica
+Fuente: R.D. 346/2011, Anexo I, epígrafe 6
+Atenuación máxima entre RITI/RITU y PAU (incluye conectores y empalmes):
+- A 1310 nm: 1,55 dB
+- A 1490 nm: 1,30 dB
+- A 1550 nm: 1,25 dB
+Atenuación típica fibra G.657:
+- A 1310 nm: 0,4 dB/km
+- A 1550 nm: 0,3 dB/km
+Atenuación por conector SC/APC: 0,3 dB típico (0,5 dB máximo)
+Atenuación por empalme por fusión: 0,1 dB típico
+
+
+TABLA: Canalización de enlace - dimensiones y número de tubos
+Fuente: R.D. 346/2011, Anexo III, epígrafe 5.3
+Canalización de enlace inferior (entre arqueta y RITI):
+- Diámetro mínimo de tubos: 63 mm
+- Número de tubos: igual que canalización externa
+Canalización de enlace superior (entre elementos de captación y RITS):
+- Para cables coaxiales RTV: tubos de 40 mm de diámetro
+- Para cables de pares (telefonía móvil/SAI): tubos de 40 mm
+- Mínimo 4 tubos en total (RTV + reserva)
+
+TABLA: Canalización principal - número y diámetro de tubos
+Fuente: R.D. 346/2011, Anexo III, epígrafe 5.6
+Canalización principal entre RITI/RITU y registros secundarios:
+Hasta 10 PAU:
+- Pares trenzados: 1 tubo 50mm
+- Coaxial: 1 tubo 50mm
+- Fibra óptica: 1 tubo 50mm
+- Cables coaxiales RTV: 1 tubo 50mm
+- Reserva: 1 tubo 50mm
+De 11 a 20 PAU:
+- Mismo esquema, pero 2 tubos por servicio donde proceda
+De 21 a 30 PAU:
+- Pares trenzados: 2 tubos 50mm
+- Coaxial: 2 tubos 50mm
+- Fibra óptica: 1 tubo 50mm
+- Cables coaxiales RTV: 1 tubo 50mm
+- Reserva: 1 tubo 50mm
+Más de 30 PAU: dimensionar según cálculo, manteniendo proporción.
+Diámetro mínimo tubos canalización principal: 50 mm
+
+TABLA: Canalización secundaria - tubos entre registro secundario y PAU
+Fuente: R.D. 346/2011, Anexo III, epígrafe 5.8
+Tubos por vivienda (mínimo 3):
+- 1 tubo de 25 mm para cables de pares trenzados
+- 1 tubo de 25 mm para cables coaxiales
+- 1 tubo de 25 mm para cables de fibra óptica
+Para locales/oficinas: dimensionar según servicios previstos, mínimo 3 tubos de 25 mm.
+Diámetro mínimo: 25 mm
+
+TABLA: Canalización interior de usuario - tubos dentro de la vivienda
+Fuente: R.D. 346/2011, Anexo III, epígrafe 5.10
+Tubos entre registro de terminación de red (RTR) y registros de toma:
+- Diámetro mínimo: 20 mm
+- Un tubo independiente por cada servicio (pares trenzados, coaxial, fibra)
+- Curvatura máxima permitida: 90° con radio mínimo según diámetro
+
+TABLA: Dimensiones registros secundarios
+Fuente: R.D. 346/2011, Anexo III, epígrafe 5.7
+Registro secundario en planta:
+Hasta 3 PAU: 450 x 450 x 150 mm (alto x ancho x profundo)
+De 4 a 20 PAU: 550 x 1000 x 150 mm
+Más de 20 PAU: 800 x 1000 x 150 mm (o múltiples registros)
+Material: empotrado en pared con tapa de material plástico o metálico.
+
+TABLA: Dimensiones registro de terminación de red (RTR) por vivienda
+Fuente: R.D. 346/2011, Anexo III, epígrafe 5.9
+Dimensiones mínimas: 500 x 600 x 80 mm (alto x ancho x profundo)
+Ubicación: dentro de la vivienda, accesible al usuario.
+Función: aloja PAU de cada servicio (telefonía, RTV, banda ancha, fibra).
+
+TABLA: Dimensiones registros de paso
+Fuente: R.D. 346/2011, Anexo III, epígrafe 5.10
+Tipo A (para cables de pares trenzados, coaxial y fibra):
+- 360 x 360 x 120 mm
+Tipo B (para cables coaxiales RTV):
+- 100 x 100 x 40 mm
+Tipo C (para cables de pares trenzados de telefonía):
+- 100 x 160 x 40 mm
+Número máximo entre registros de paso: 2 curvas de 90° o 15 metros de tubo.
+
+
+TABLA: Distancias mínimas entre canalizaciones ICT y otros servicios
+Fuente: R.D. 346/2011, Anexo III, epígrafe 5.11
+Separación canalizaciones de telecomunicación respecto a:
+- Canalizaciones eléctricas BT (Baja Tensión): mínimo 10 cm en paralelo
+- Canalizaciones eléctricas MT/AT (Media/Alta Tensión): mínimo 30 cm
+- Tuberías de agua, gas, calefacción: mínimo 10 cm en paralelo
+- Cruces con cualquier otra canalización: mínimo 3 cm
+Notas:
+- Si la separación no se puede cumplir, usar tubos metálicos con continuidad eléctrica.
+- En cruces es válido cualquier ángulo siempre que se respete la distancia mínima.
+
+TABLA: Elementos de captación RTV - separaciones mínimas
+Fuente: R.D. 346/2011, Anexo I, epígrafe 4.2
+Distancia mínima entre antenas terrestres (UHF/VHF/FM): 1 metro
+Distancia entre antena terrestre y parábola SAT: 1 metro mínimo
+Distancia a obstáculos en línea de visión SAT: despejado al menos 3 metros
+Altura mínima del mástil sobre cubierta transitable: 2 metros
+Altura mínima del mástil sobre cubierta no transitable: 1 metro
+Separación de las antenas respecto a cables eléctricos aéreos: 1,5 metros mínimo
+
+TABLA: Tomas de tierra y protecciones en cabecera
+Fuente: R.D. 346/2011, Anexo I, epígrafe 4.4
+Resistencia máxima de la toma de tierra: <= 10 ohmios
+Conductor de tierra desde mástil: cobre desnudo de mínimo 25 mm²
+Conductor equipotencial entre equipos de cabecera: cobre aislado mínimo 6 mm²
+Distancia máxima entre mástil y RITS: lo más corta posible (recomendado <= 30 m)
+Protecciones obligatorias en cabecera:
+- Descargadores de sobretensiones en entradas de antena
+- Toma de tierra independiente o conectada a la del edificio
+
+TABLA: Equipos de cabecera RTV - características mínimas
+Fuente: R.D. 346/2011, Anexo I, epígrafe 4.3
+Amplificadores monocanal o de banda ancha según diseño.
+Margen de ganancia ajustable: al menos 15 dB
+Tensión máxima de salida (intermodulación): mínimo 110 dBµV (3er orden, 2 canales)
+Figura de ruido máxima: 10 dB (UHF) / 12 dB (VHF) / 14 dB (FI satélite)
+Mezcladores: pérdidas máximas 6 dB por entrada
+Fuente de alimentación: redundancia recomendada en instalaciones > 30 PAU
+Conmutación automática satélite (DiSEqC): obligatoria si hay más de un LNB
+
+TABLA: Punto de Acceso al Usuario (PAU) - funciones por servicio
+Fuente: R.D. 346/2011, Anexo I, epígrafes 5, 6 y 7
+PAU de telefonía + pares trenzados:
+- Conmuta entre red exterior y red interior de usuario
+- Permite acceso de varios operadores
+- Ubicado en RTR de la vivienda
+PAU de RTV (coaxial):
+- Distribuidor pasivo de señal a las tomas
+- Ubicado en RTR
+PAU de fibra óptica:
+- Roseta óptica con conector SC/APC
+- Punto de demarcación entre operador y red interior
+- Ubicado en RTR
+
+TABLA: Red de dispersión y red de distribución - longitudes y diseño
+Fuente: R.D. 346/2011, Anexo I, epígrafes 5 y 6
+Red de distribución (entre cabecera y registros secundarios):
+- Cable coaxial de mínimo categoría correspondiente a 2150 MHz
+- Longitud típica máxima por ramal: 100 metros
+Red de dispersión (entre registro secundario y PAU):
+- Cable coaxial de las mismas características
+- Longitud máxima recomendada: 30 metros
+Red interior de usuario (entre PAU y tomas):
+- Cable coaxial RG-6 o equivalente
+- Longitud máxima por ramal: 20 metros recomendado
+Atenuación total acumulada cabecera-toma: no superar lo indicado en tabla de atenuación máxima
