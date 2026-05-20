@@ -274,3 +274,174 @@ Red interior de usuario (entre PAU y tomas):
 - Cable coaxial RG-6 o equivalente
 - Longitud máxima por ramal: 20 metros recomendado
 Atenuación total acumulada cabecera-toma: no superar lo indicado en tabla de atenuación máxima
+
+TABLA: Niveles de señal en cabecera - entrada y salida amplificadores RTV
+Fuente: R.D. 346/2011, Anexo I, epígrafe 4.3
+Nivel mínimo de entrada a amplificador (señal terrestre UHF/VHF): 40 dBµV
+Nivel máximo de entrada a amplificador (sin saturación): 80 dBµV
+Nivel máximo de salida amplificador monocanal UHF: 110 dBµV (con intermodulación < -60 dB)
+Nivel máximo de salida amplificador de banda ancha: 100 dBµV
+Nivel mínimo de salida recomendado cabecera: suficiente para compensar pérdidas de red hasta toma
+Margen dinámico mínimo amplificador: 40 dB
+Figura de ruido máxima amplificador UHF: 10 dB
+Figura de ruido máxima amplificador VHF/FM: 12 dB
+Figura de ruido máxima amplificador FI satélite: 14 dB
+Relación señal/ruido mínima en cabecera (C/N): >= 43 dB para TDT
+
+TABLA: Niveles de señal LNB y cabecera satélite
+Fuente: R.D. 346/2011, Anexo I, epígrafe 4.3
+Figura de ruido LNB (Low Noise Block): <= 0,7 dB (recomendado)
+Ganancia LNB: entre 50 y 60 dB típico
+Nivel de salida LNB: entre -65 y -25 dBm según señal recibida
+Tensión de alimentación LNB desde receptor/amplificador: 13V (polarización vertical) / 18V (horizontal)
+Tono 22 kHz para selección de banda LNB universal: presente (banda alta) / ausente (banda baja)
+Banda baja LNB universal: 10,7 - 11,7 GHz → FI 950 - 1950 MHz
+Banda alta LNB universal: 11,7 - 12,75 GHz → FI 1100 - 2150 MHz
+Frecuencia de oscilador local LNB banda baja: 9750 MHz
+Frecuencia de oscilador local LNB banda alta: 10600 MHz
+DiSEqC: protocolo de control para selección de LNB/satélite en instalaciones con varios satélites
+
+TABLA: Parámetros de calidad de señal en cabecera y red
+Fuente: R.D. 346/2011, Anexo I, epígrafe 4.5
+TDT (COFDM): C/N >= 25 dB (QAM-64, code rate 2/3) en toma
+TDT: MER >= 21 dB en toma (valor aconsejable 22 dB; mínimo en antena 23 dB)
+TDT: BER antes de Viterbi < 9x10^-5
+SAT DVB-S (QPSK): C/N >= 11 dB en toma
+SAT DVB-S2 (8PSK): C/N >= 14 dB en toma
+SAT: BER antes de Reed-Solomon < 9x10^-5
+FM Radio: S/N >= 38 dB mono / >= 50 dB estéreo en toma
+DAB Radio: BER < 1x10^-4 antes de Viterbi
+Ecos e interferencias: relación portadora/interferencia (C/I) >= 30 dB
+
+TABLA: Tomas mínimas por estancia en viviendas - detalle completo
+Fuente: R.D. 346/2011, Anexo II, epígrafe 3.5 (modificado por Orden ECE/983/2019)
+Salón o estancia principal:
+- Pares trenzados (BAT): mínimo 2 registros de toma, uno de ellos con 2 tomas dobles RJ-45
+- Coaxial RTV: 1 registro de toma
+- Fibra óptica: 1 roseta óptica SC/APC
+Dormitorios y resto de estancias (excluidos baños y trasteros):
+- Pares trenzados (BAT): 1 registro de toma con toma doble RJ-45
+- Coaxial RTV: 1 registro de toma (obligatorio solo en 2 estancias adicionales distintas al salón)
+- Fibra óptica: no obligatoria en estancias secundarias
+Cocina:
+- Pares trenzados: 1 registro de toma
+- Coaxial: no obligatorio
+Número mínimo total de tomas coaxiales en vivienda: salón + 2 estancias = 3 tomas coaxiales mínimo
+Número mínimo total de tomas de pares trenzados: salón (2) + resto estancias (1 por estancia)
+Baños y trasteros: exentos de tomas obligatorias
+
+TABLA: Características del Registro de Terminación de Red (RTR) y PAU
+Fuente: R.D. 346/2011, Anexo II, epígrafe 3.4
+RTR (Registro de Terminación de Red):
+- Ubicación: interior de la vivienda, accesible al usuario, normalmente en el recibidor
+- Dimensiones mínimas: 500 x 600 x 80 mm (alto x ancho x profundo)
+- Contenido: PAU de cada servicio (telefonía, RTV coaxial, fibra óptica, banda ancha)
+PAU de telefonía (pares trenzados):
+- Permite conmutar entre operadores
+- Separa red interior de red de dispersión
+- Conector RJ-45 o regleta de conexión
+PAU de RTV (coaxial):
+- Distribuidor/derivador pasivo hacia tomas interiores
+- Pérdidas máximas según número de salidas
+PAU de fibra óptica (FTTH):
+- Roseta óptica con conector SC/APC
+- Punto de demarcación entre operador y red interior usuario
+- Admite ONT (Optical Network Terminal) del operador
+
+TABLA: Requisitos ICT en garajes, trasteros y zonas comunes
+Fuente: R.D. 346/2011, Anexo II, epígrafe 3.6
+Garajes:
+- Si tienen puestos de aparcamiento numerados: 1 registro de toma de pares trenzados por plaza
+- Coaxial y fibra: no obligatorio en plazas individuales
+Trasteros:
+- Exentos de tomas obligatorias de telecomunicación
+Zonas comunes (portal, escaleras, pasillos):
+- Previsión de canalización para videoportero y control de accesos
+- Al menos 1 registro de toma de pares trenzados en portal para videoportero
+- Canalización desde portal hasta RITI para servicios de control de acceso
+Locales comerciales (sin distribución interior definida):
+- Al menos 1 registro de toma de pares trenzados
+- Al menos 1 registro de toma coaxial
+- Previsión de canalización para fibra óptica
+
+TABLA: Parámetros de red de telefonía - impedancias y pérdidas de retorno
+Fuente: R.D. 346/2011, Anexo I, epígrafe 5
+Impedancia característica red de pares trenzados: 100 ohmios (Cat 6)
+Pérdidas de retorno mínimas (Return Loss):
+- A 100 MHz (Cat 6): >= 20 dB
+- A 250 MHz (Cat 6): >= 14 dB
+Pérdidas de inserción máximas (atenuación):
+- A 100 MHz (Cat 6): <= 21 dB / 100m
+- A 250 MHz (Cat 6): <= 36 dB / 100m
+NEXT (Near End CrossTalk) mínimo Cat 6:
+- A 100 MHz: >= 44 dB
+- A 250 MHz: >= 37 dB
+ELFEXT mínimo Cat 6 a 100 MHz: >= 27 dB
+Delay skew máximo entre pares Cat 6: <= 45 ns / 100m
+Resistencia de bucle máxima Cat 6: <= 9,38 ohmios / 100m
+Capacitancia mutua Cat 6: <= 5,6 nF / 100m
+
+TABLA: Requisitos de apantallamiento y compatibilidad electromagnética (CEM)
+Fuente: R.D. 346/2011, Anexo III, epígrafe 5.11 y Orden ECE/983/2019
+Apantallamiento de canalizaciones metálicas:
+- Continuidad eléctrica obligatoria en toda la canalización metálica
+- Conexión a tierra en ambos extremos de bandejas y tubos metálicos
+Apantallamiento de cables coaxiales:
+- Transferencia de impedancia máxima: <= 10 mΩ/m a 30 MHz
+- Cobertura de apantallamiento mínima: >= 85% (recomendado >= 95%)
+Compatibilidad electromagnética:
+- Separación mínima de canalizaciones ICT respecto a fuentes de interferencia
+- Evitar paralelismos largos con líneas eléctricas (> 30 m requiere apantallamiento adicional)
+- Cruzar cables eléctricos y de telecomunicación en ángulo recto cuando sea posible
+Equipos activos (amplificadores, distribuidores activos):
+- Deben cumplir marcado CE y directiva CEM 2014/30/UE
+- Emisiones electromagnéticas: clase B (uso residencial)
+
+TABLA: Requisitos ICT en edificios de uso exclusivo no residencial
+Fuente: R.D. 346/2011, Anexo II, epígrafe 4
+Edificios de oficinas y uso terciario:
+- Canalización principal dimensionada para al menos 2 operadores simultáneos
+- Red de distribución: mínimo Cat 6 o fibra óptica hasta cada planta
+- Al menos 1 registro de toma por cada 10 m² de superficie útil (mínimo 2 por local)
+- Previsión obligatoria de canalización para fibra óptica hasta cada planta
+Edificios de uso industrial:
+- Canalización exterior e interior según número de PAU equivalentes
+- Dimensionamiento igual que edificios residenciales de mismo número de usuarios
+Hoteles y edificios de uso hotelero:
+- Cada habitación equivale a 1 PAU a efectos de dimensionamiento
+- Tomas mínimas por habitación: 1 coaxial RTV + 1 pares trenzados + previsión fibra
+- Zona común (recepción, salones): dimensionar como local comercial
+
+TABLA: Plazos y obligaciones del proyecto técnico ICT
+Fuente: R.D. 346/2011, Artículos 3, 4 y 5
+Obligación de ICT: todos los edificios de nueva construcción con acceso a servicios de telecomunicación.
+Proyecto técnico ICT: obligatorio, firmado por ingeniero de telecomunicación o ingeniero técnico de telecomunicación.
+Visado: obligatorio por Colegio Oficial de Ingenieros de Telecomunicación (COIT/AEIT).
+Boletín de instalación: emitido por instalador de telecomunicaciones habilitado (clase A o B según instalación).
+Registro de la instalación: el boletín debe depositarse en la Jefatura Provincial de Inspección de Telecomunicaciones.
+Plazo de conservación de proyecto y boletín por la propiedad: mínimo 10 años.
+Instalador habilitado clase A: puede realizar todo tipo de instalaciones ICT.
+Instalador habilitado clase B: limitado a instalaciones en viviendas unifamiliares y locales.
+
+TABLA: Inspección y mantenimiento de instalaciones ICT
+Fuente: R.D. 346/2011, Artículo 9 y Anexo IV
+Responsabilidad de mantenimiento: comunidad de propietarios para zonas comunes; propietario/usuario para red interior.
+Inspección periódica obligatoria: no establecida con periodicidad fija, pero obligatoria ante modificaciones.
+Modificaciones que requieren nuevo proyecto: ampliaciones que afecten a la red común o cambio de cabecera.
+Modificaciones que requieren nuevo boletín: cualquier intervención en instalación existente por instalador habilitado.
+Libro del edificio: debe incluir proyecto ICT, boletines y cualquier modificación posterior.
+Averías en red común: responsabilidad de la comunidad de propietarios.
+Averías en red interior de usuario: responsabilidad del propietario o usuario de la vivienda.
+
+TABLA: Resumen de normativa ICT vigente en España
+Fuente: R.D. 346/2011, Orden ECE/983/2019
+R.D. 346/2011 de 11 de marzo: reglamento principal ICT, establece infraestructuras comunes en edificios.
+Orden ITC/1644/2011: desarrolla el R.D. 346/2011, especificaciones técnicas detalladas.
+Orden ECE/983/2019 de 6 de septiembre: modifica R.D. 346/2011, actualiza requisitos para redes ultrarrápidas y fibra óptica.
+Principales cambios Orden ECE/983/2019:
+- Obligatoriedad de fibra óptica (FTTH) en nuevas instalaciones
+- Nuevos requisitos de reacción al fuego para cables
+- Actualización de categorías de cables de pares trenzados (mínimo Cat 6)
+- Adaptación a redes de banda ultraancha (>= 1 Gbps)
+Reglamento ICT2 (Televés): guía técnica de referencia, no tiene rango normativo pero es ampliamente usada.
+Normas UNE de referencia ICT: UNE-EN 50083, UNE-EN 50117, UNE-EN 50173, UNE-EN 50174.
