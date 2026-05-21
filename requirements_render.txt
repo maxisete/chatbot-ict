@@ -1,0 +1,13 @@
+fastapi==0.136.1
+uvicorn==0.47.0
+chromadb==1.5.9
+sentence-transformers==5.5.0
+groq==1.2.0
+python-telegram-bot==22.7
+pypdf==6.11.0
+python-dotenv==1.2.2
+requests==2.34.2
+torch==2.12.0
+transformers==5.8.1
+huggingface_hub==1.15.0
+numpy==2.4.6
