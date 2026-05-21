@@ -81,6 +81,29 @@ def trocear_por_tabla(texto: str, nombre_doc: str):
         chunk_id += 1
     return fragmentos
 
+def descargar_televes_si_falta():
+    """Descarga el Reglamento ICT2 Televés desde Google Drive si no existe localmente."""
+    ruta = PDFS_DIR / "Reglamento ICT2 Televés.pdf"
+    if ruta.exists():
+        return
+    print("Descargando Reglamento ICT2 Televés desde Google Drive...")
+    file_id = "1hS8NBWKeCxVn3Y2OnwwOFOoZEJaq7HgK"
+    url = f"https://drive.google.com/uc?export=download&id={file_id}"
+    import requests
+    session = requests.Session()
+    response = session.get(url, stream=True)
+    # Google Drive añade una página de confirmación para ficheros grandes
+    for key, value in response.cookies.items():
+        if key.startswith("download_warning"):
+            url = f"https://drive.google.com/uc?export=download&id={file_id}&confirm={value}"
+            response = session.get(url, stream=True)
+            break
+    with open(ruta, "wb") as f:
+        for chunk in response.iter_content(chunk_size=32768):
+            if chunk:
+                f.write(chunk)
+    print(f"✓ Reglamento ICT2 Televés descargado ({ruta.stat().st_size // 1024 // 1024} MB)")
+
 def ingestar_pdfs():
     """Proceso principal de ingesta."""
     print(f"Cargando modelo de embeddings: {EMBEDDING_MODEL}")
@@ -95,6 +118,7 @@ def ingestar_pdfs():
     )
     print(f"Colección '{COLLECTION_NAME}' lista.")
 
+    descargar_televes_si_falta()
     pdfs = list(PDFS_DIR.glob("*.pdf")) + list(PDFS_DIR.glob("*.txt"))
     if not pdfs:
         print(f"No se encontraron PDFs en {PDFS_DIR}")
