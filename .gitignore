@@ -26,5 +26,5 @@ models/
 Thumbs.db
 
 # PDFs y base de datos vectorial (no van a Git, son locales)
-data/pdfs/*.pdf
+data/pdfs/Reglamento ICT2 Televés.pdf
 data/vectordb/
