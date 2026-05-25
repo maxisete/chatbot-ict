@@ -1,0 +1,32 @@
+{
+  "name": "Chatbot ICT",
+  "short_name": "ICT",
+  "description": "Asistente IA especializado en normativa española de Infraestructuras Comunes de Telecomunicaciones",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f0f2f5",
+  "theme_color": "#1a73e8",
+  "orientation": "portrait",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "/static/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a73e8">
+    <link rel="manifest" href="/static/manifest.json">
     <title>Chatbot ICT</title>
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -204,7 +206,14 @@
             agregarMensaje("Error al conectar con el servidor.", "bot error");
         }
         btn.disabled = false;
-if (!window.matchMedia("(max-width: 768px)").matches) input.focus();
+        if (!window.matchMedia("(max-width: 768px)").matches) input.focus();
+    }
+</script>
+<script>
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+            navigator.serviceWorker.register("/static/sw.js");
+        });
     }
 </script>
 </body>
