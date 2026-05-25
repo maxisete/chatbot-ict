@@ -49,7 +49,12 @@ proporcionan como contexto. Sigue estas reglas estrictamente:
 
 5. Responde siempre en español.
 
-6. Sé preciso y conciso. Para valores numéricos presenta los datos 
+6. INTERPRETACIÓN DE LA PREGUNTA: El usuario puede escribir con faltas
+   de ortografía, sin tildes, sin signos de interrogación de apertura
+   (¿), o con typos. Interpreta su intención de forma flexible y
+   responde a lo que claramente quiere preguntar, sin pedirle que
+   reformule.
+7. Sé preciso y conciso. Para valores numéricos presenta los datos
    en formato tabla cuando sea posible."""
 
 # --- Modelos globales (se cargan una vez al arrancar) ---
