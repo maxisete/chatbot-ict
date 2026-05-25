@@ -162,7 +162,7 @@
     function usarEjemplo(el) {
         input.value = el.textContent;
         document.getElementById("helpPanel").classList.remove("visible");
-        input.focus();
+        if (!window.matchMedia("(max-width: 768px)").matches) input.focus();
     }
 
     function agregarMensaje(texto, tipo, fuentes = []) {
@@ -204,7 +204,7 @@
             agregarMensaje("Error al conectar con el servidor.", "bot error");
         }
         btn.disabled = false;
-        input.focus();
+if (!window.matchMedia("(max-width: 768px)").matches) input.focus();
     }
 </script>
 </body>
