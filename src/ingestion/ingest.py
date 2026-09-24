@@ -81,28 +81,43 @@ def trocear_por_tabla(texto: str, nombre_doc: str):
         chunk_id += 1
     return fragmentos
 
-def descargar_televes_si_falta():
-    """Descarga el Reglamento ICT2 Televés desde Google Drive si no existe localmente."""
-    ruta = PDFS_DIR / "Reglamento ICT2 Televés.pdf"
-    if ruta.exists():
-        return
-    print("Descargando Reglamento ICT2 Televés desde Google Drive...")
-    file_id = "1hS8NBWKeCxVn3Y2OnwwOFOoZEJaq7HgK"
-    url = f"https://drive.google.com/uc?export=download&id={file_id}"
+def descargar_pdfs_si_faltan():
+    """Descarga los PDFs desde Google Drive si no existen localmente."""
+    pdfs = [
+        {
+            "nombre": "Reglamento ICT2 Televés.pdf",
+            "file_id": "1hS8NBWKeCxVn3Y2OnwwOFOoZEJaq7HgK"
+        },
+        {
+            "nombre": "R.D. 346 2011 de 11 de Marzo.pdf",
+            "file_id": "11O60cCKUMdDEq9TchenrNpTWcV8uPd_H"
+        },
+        {
+            "nombre": "Orden ECE 983 2019.pdf",
+            "file_id": "1PoEd3M50j4Mj13jtY5zisqxqzo4SUYUQ"
+        }
+    ]
     import requests
-    session = requests.Session()
-    response = session.get(url, stream=True)
-    # Google Drive añade una página de confirmación para ficheros grandes
-    for key, value in response.cookies.items():
-        if key.startswith("download_warning"):
-            url = f"https://drive.google.com/uc?export=download&id={file_id}&confirm={value}"
-            response = session.get(url, stream=True)
-            break
-    with open(ruta, "wb") as f:
-        for chunk in response.iter_content(chunk_size=32768):
-            if chunk:
-                f.write(chunk)
-    print(f"✓ Reglamento ICT2 Televés descargado ({ruta.stat().st_size // 1024 // 1024} MB)")
+    for pdf in pdfs:
+        ruta = PDFS_DIR / pdf["nombre"]
+        if ruta.exists():
+            print(f"✓ {pdf['nombre']} ya existe.")
+            continue
+        print(f"Descargando {pdf['nombre']}...")
+        file_id = pdf["file_id"]
+        url = f"https://drive.google.com/uc?export=download&id={file_id}"
+        session = requests.Session()
+        response = session.get(url, stream=True)
+        for key, value in response.cookies.items():
+            if key.startswith("download_warning"):
+                url = f"https://drive.google.com/uc?export=download&id={file_id}&confirm={value}"
+                response = session.get(url, stream=True)
+                break
+        with open(ruta, "wb") as f:
+            for chunk in response.iter_content(chunk_size=32768):
+                if chunk:
+                    f.write(chunk)
+        print(f"✓ {pdf['nombre']} descargado ({ruta.stat().st_size // 1024 // 1024} MB)")
 
 def ingestar_pdfs():
     """Proceso principal de ingesta."""
@@ -118,7 +133,7 @@ def ingestar_pdfs():
     )
     print(f"Colección '{COLLECTION_NAME}' lista.")
 
-    descargar_televes_si_falta()
+    descargar_pdfs_si_faltan()
     pdfs = list(PDFS_DIR.glob("*.pdf")) + list(PDFS_DIR.glob("*.txt"))
     if not pdfs:
         print(f"No se encontraron PDFs en {PDFS_DIR}")

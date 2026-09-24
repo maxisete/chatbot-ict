@@ -5,7 +5,7 @@ venv/
 # Variables de entorno (API keys, contraseñas)
 .env
 
-# Base de datos vectorial (se genera localmente)
+# Base de datos vectorial (se genera al arrancar)
 data/vectordb/
 
 # Logs
@@ -25,6 +25,5 @@ models/
 .DS_Store
 Thumbs.db
 
-# PDFs y base de datos vectorial (no van a Git, son locales)
-data/pdfs/Reglamento ICT2 Televés.pdf
-data/vectordb/
+# PDF de normativa: se descargan al arrancar (src/ingestion/ingest.py)
+data/pdfs/*.pdf
