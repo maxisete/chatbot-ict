@@ -153,10 +153,11 @@ def procesar_consulta(pregunta: str, session_id: str) -> dict:
     })
 
     respuesta_groq = cliente_groq.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-120b",
         messages=messages,
         temperature=0.1,
-        max_tokens=1024
+        max_tokens=4096,
+        reasoning_effort="low"
     )
     respuesta_texto = respuesta_groq.choices[0].message.content
 
