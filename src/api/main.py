@@ -10,7 +10,8 @@ from pydantic import BaseModel
 from collections import defaultdict
 from dotenv import load_dotenv
 import time
-import httpx
+import html
+import re
 from src.api.logging_config import setup_logging, log_consulta
 from sentence_transformers import SentenceTransformer
 import chromadb
@@ -202,6 +203,52 @@ def consultar(request: PreguntaRequest):
     return RespuestaResponse(**resultado)
 
 
+def markdown_a_telegram(texto: str) -> str:
+    """Convierte el Markdown del modelo al HTML limitado que admite Telegram.
+
+    Telegram no admite tablas: cada fila se convierte en una viñeta.
+    Todo el texto se escapa antes de añadir etiquetas, para que nada de lo
+    que escriba el modelo pueda interpretarse como HTML.
+    """
+    texto = re.sub(r"<br\s*/?>", " / ", texto, flags=re.IGNORECASE)
+    salida = []
+    cabecera = None
+    for linea in texto.split("\n"):
+        l = linea.strip()
+        # Tablas: la primera fila es la cabecera y el separador se descarta.
+        if l.startswith("|") and l.endswith("|") and len(l) > 1:
+            celdas = [c.strip().replace("**", "") for c in l.strip("|").split("|")]
+            if all(re.fullmatch(r":?-{2,}:?", c) for c in celdas if c):
+                continue
+            if cabecera is None:
+                cabecera = celdas
+                continue
+            detalles = []
+            for i, c in enumerate(celdas[1:], start=1):
+                if not c:
+                    continue
+                etiqueta = cabecera[i] if i < len(cabecera) else ""
+                detalles.append(f"{etiqueta}: {c}" if etiqueta else c)
+            fila = f"• **{celdas[0]}**"
+            if detalles:
+                fila += " — " + " · ".join(detalles)
+            salida.append(fila)
+            continue
+        cabecera = None
+        if re.match(r"#{1,6}\s", l):
+            l = "**" + re.sub(r"^#{1,6}\s+", "", l).replace("**", "") + "**"
+        elif re.match(r"[-*]\s", l):
+            l = "• " + l[2:].strip()
+        elif l.startswith(">"):
+            l = l.lstrip(">").strip()
+        salida.append(l)
+    resultado = html.escape("\n".join(salida), quote=False)
+    resultado = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", resultado)
+    resultado = re.sub(r"`([^`\n]+)`", r"<code>\1</code>", resultado)
+    resultado = re.sub(r"\n{3,}", "\n\n", resultado)
+    return resultado.strip()
+
+
 @app.post("/webhook")
 async def webhook(request: Request):
     if not TELEGRAM_TOKEN:
@@ -240,15 +287,24 @@ async def webhook(request: Request):
             fragmentos = resultado["fragmentos_usados"]
             docs = list(set(f["documento"] for f in fragmentos))
             fuentes = "📄 Fuentes: " + ", ".join(docs)
-            respuesta = f"{respuesta_texto}\n\n{fuentes}"
-            if len(respuesta) > 4096:
-                respuesta = respuesta[:4090] + "..."
+            respuesta = markdown_a_telegram(respuesta_texto) + "\n\n" + html.escape(fuentes, quote=False)
         except Exception as e:
             logger.error(f"Error procesando consulta Telegram: {e}")
             respuesta = "❌ Ha ocurrido un error. Inténtalo de nuevo."
-    async with httpx.AsyncClient() as client:
-        await client.post(
-            f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
-            json={"chat_id": chat_id, "text": respuesta}
-        )
-    return JSONResponse(content={"ok": True})
+    # Respuesta dentro del propio webhook: Telegram ejecuta el sendMessage.
+    # Así el Space no necesita conectarse a api.telegram.org (bloqueado en
+    # HuggingFace) y el token no viaja en ninguna URL ni aparece en los logs.
+    contenido = {
+        "method": "sendMessage",
+        "chat_id": chat_id,
+        "text": respuesta,
+        "parse_mode": "HTML"
+    }
+    # Si supera el límite de Telegram, recortar el HTML podría dejar una
+    # etiqueta abierta y Telegram lo rechazaría sin avisar: en ese caso
+    # se envía como texto plano.
+    if len(respuesta) > 4096:
+        texto_plano = html.unescape(re.sub(r"<[^>]+>", "", respuesta))
+        contenido["text"] = texto_plano[:4090] + "..."
+        del contenido["parse_mode"]
+    return JSONResponse(content=contenido)
