@@ -195,6 +195,9 @@
         return div;
     }
 
+    // Identificador aleatorio de esta conversación: cada visitante tiene la suya.
+    const sessionId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : null;
+
     async function enviar() {
         const pregunta = input.value.trim();
         if (!pregunta) return;
@@ -208,14 +211,22 @@
             const res = await fetch("/consulta", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ pregunta })
+                body: JSON.stringify({ pregunta, session_id: sessionId })
             });
-            const data = await res.json();
+            // Si el servidor está dormido o arrancando, la respuesta no es JSON.
+            let data = null;
+            try { data = await res.json(); } catch (e) { data = null; }
             thinking.remove();
-            agregarMensaje(data.respuesta, "bot", data.fragmentos_usados);
+            if (res.ok && data && data.respuesta) {
+                agregarMensaje(data.respuesta, "bot", data.fragmentos_usados);
+            } else if (data && typeof data.detail === "string") {
+                agregarMensaje(data.detail, "bot error");
+            } else {
+                agregarMensaje("El servidor se está iniciando o no está disponible. Espera un minuto y vuelve a intentarlo.", "bot error");
+            }
         } catch (err) {
             thinking.remove();
-            agregarMensaje("Error al conectar con el servidor.", "bot error");
+            agregarMensaje("No se ha podido conectar con el servidor. Comprueba tu conexión a Internet y vuelve a intentarlo.", "bot error");
         }
         btn.disabled = false;
         if (!window.matchMedia("(max-width: 768px)").matches) input.focus();

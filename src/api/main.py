@@ -15,7 +15,8 @@ import re
 from src.api.logging_config import setup_logging, log_consulta
 from sentence_transformers import SentenceTransformer
 import chromadb
-from groq import Groq
+from groq import Groq, APIConnectionError, APIStatusError, RateLimitError
+import uuid
 
 # --- Configuración ---
 load_dotenv()
@@ -109,11 +110,31 @@ app.add_middleware(
 # --- Modelos de datos ---
 class PreguntaRequest(BaseModel):
     pregunta: str
-    session_id: str = "web_default"
+    session_id: str | None = None
 
 class RespuestaResponse(BaseModel):
     respuesta: str
     fragmentos_usados: list[dict]
+
+class ServicioIAError(Exception):
+    """Fallo del servicio de IA con un mensaje apto para mostrar al usuario."""
+    def __init__(self, mensaje: str, codigo: int):
+        super().__init__(mensaje)
+        self.mensaje = mensaje
+        self.codigo = codigo
+
+PATRON_UUID = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
+
+def sesion_web(session_id: str | None) -> str:
+    """Aísla el historial de cada visitante de la web.
+
+    Solo acepta identificadores UUID y les añade el prefijo web_, de modo que
+    nadie puede leer ni alterar el historial de otra sesión (por ejemplo,
+    las de Telegram). Si el valor no es válido, se crea una sesión nueva.
+    """
+    if session_id and PATRON_UUID.fullmatch(session_id.lower()):
+        return f"web_{session_id.lower()}"
+    return f"web_{uuid.uuid4()}"
 
 # --- Función central de consulta (compartida web y Telegram) ---
 def procesar_consulta(pregunta: str, session_id: str) -> dict:
@@ -159,14 +180,27 @@ def procesar_consulta(pregunta: str, session_id: str) -> dict:
         "content": f"Contexto normativo:\n{contexto}\n\nPregunta: {pregunta}"
     })
 
-    respuesta_groq = cliente_groq.chat.completions.create(
-        model="openai/gpt-oss-120b",
-        messages=messages,
-        temperature=0.1,
-        max_tokens=4096,
-        reasoning_effort="low"
-    )
+    try:
+        respuesta_groq = cliente_groq.chat.completions.create(
+            model="openai/gpt-oss-120b",
+            messages=messages,
+            temperature=0.1,
+            max_tokens=4096,
+            reasoning_effort="low"
+        )
+    except RateLimitError:
+        logger.warning("Groq: límite de peticiones alcanzado (429)")
+        raise ServicioIAError("Hay muchas consultas en este momento. Espera un minuto y vuelve a intentarlo.", 429)
+    except APIConnectionError as e:
+        logger.error(f"Groq: fallo de conexión: {e}")
+        raise ServicioIAError("No se ha podido contactar con el servicio de IA. Inténtalo de nuevo en unos minutos.", 503)
+    except APIStatusError as e:
+        logger.error(f"Groq: error {e.status_code}: {e.message}")
+        raise ServicioIAError("El servicio de IA no está disponible en este momento. Inténtalo más tarde.", 503)
     respuesta_texto = respuesta_groq.choices[0].message.content
+    if not respuesta_texto:
+        logger.error("Groq devolvió una respuesta vacía")
+        raise ServicioIAError("No se ha podido generar una respuesta. Prueba a formular la pregunta de otra forma.", 502)
 
     historial_conversaciones[session_id].append({"role": "user", "content": pregunta})
     historial_conversaciones[session_id].append({"role": "assistant", "content": respuesta_texto})
@@ -199,7 +233,13 @@ def consultar(request: PreguntaRequest):
     if not request.pregunta.strip():
         raise HTTPException(status_code=400, detail="La pregunta no puede estar vacía")
     logger.info(f"Consulta web recibida: {request.pregunta}")
-    resultado = procesar_consulta(request.pregunta, request.session_id)
+    try:
+        resultado = procesar_consulta(request.pregunta, sesion_web(request.session_id))
+    except ServicioIAError as e:
+        raise HTTPException(status_code=e.codigo, detail=e.mensaje)
+    except Exception:
+        logger.exception("Error inesperado procesando consulta web")
+        raise HTTPException(status_code=500, detail="Se ha producido un error inesperado. Inténtalo de nuevo.")
     return RespuestaResponse(**resultado)
 
 
@@ -288,8 +328,10 @@ async def webhook(request: Request):
             docs = list(set(f["documento"] for f in fragmentos))
             fuentes = "📄 Fuentes: " + ", ".join(docs)
             respuesta = markdown_a_telegram(respuesta_texto) + "\n\n" + html.escape(fuentes, quote=False)
-        except Exception as e:
-            logger.error(f"Error procesando consulta Telegram: {e}")
+        except ServicioIAError as e:
+            respuesta = "\u26a0\ufe0f " + e.mensaje
+        except Exception:
+            logger.exception("Error procesando consulta Telegram")
             respuesta = "❌ Ha ocurrido un error. Inténtalo de nuevo."
     # Respuesta dentro del propio webhook: Telegram ejecuta el sendMessage.
     # Así el Space no necesita conectarse a api.telegram.org (bloqueado en
