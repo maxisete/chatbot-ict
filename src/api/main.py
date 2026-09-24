@@ -59,7 +59,13 @@ proporcionan como contexto. Sigue estas reglas estrictamente:
    reformule.
 
 7. Sé preciso y conciso. Para valores numéricos presenta los datos
-   en formato tabla cuando sea posible."""
+   en formato tabla cuando sea posible.
+
+8. FORMATO DE TABLAS: usa tablas Markdown estándar. Cada fila de la
+   tabla debe ocupar una sola línea: nunca pongas saltos de línea dentro
+   de una celda. Si un parámetro tiene valores distintos según el caso
+   (por ejemplo, según la modulación), crea una fila para cada caso.
+   No uses etiquetas HTML como <br>."""
 
 # --- Modelos globales ---
 modelo_embeddings = None
